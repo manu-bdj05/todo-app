@@ -19,15 +19,17 @@ export function useAuth() {
       localStorage.getItem("todo-app-users") || "{}"
     );
 
-    const found = Object.values(users).find(
-      (u) => u.email === email && u.password === password
-    );
+    const userByEmail = Object.values(users).find((u) => u.email === email);
 
-    if (!found) {
-      throw new Error("Email ou mot de passe incorrect");
+    if (!userByEmail) {
+      throw new Error("Aucun compte associé à cet e-mail. Veuillez vous inscrire.");
     }
 
-    const { password: _, ...userWithoutPassword } = found;
+    if (userByEmail.password !== password) {
+      throw new Error("Mot de passe incorrect.");
+    }
+
+    const { password: _, ...userWithoutPassword } = userByEmail;
     setUser(userWithoutPassword);
   };
 
