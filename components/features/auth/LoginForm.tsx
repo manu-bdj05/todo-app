@@ -63,6 +63,8 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
                 name="email"
                 type="email"
                 placeholder="m@example.com"
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                title="Veuillez saisir une adresse e-mail valide (ex: utilisateur@domaine.com)"
                 required
               />
             </div>

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { User, LoginCredentials, RegisterCredentials } from "./types";
 
+import { isValidEmail } from "./validation";
+
 type UsersMap = Record<string, User & { password: string }>;
 
 export function useAuth() {
@@ -15,6 +17,10 @@ export function useAuth() {
   }, []);
 
   const login = async ({ email, password }: LoginCredentials) => {
+    if (!isValidEmail(email)) {
+      throw new Error("Veuillez saisir une adresse e-mail valide (ex: utilisateur@domaine.com).");
+    }
+
     const users: UsersMap = JSON.parse(
       localStorage.getItem("todo-app-users") || "{}"
     );
@@ -34,6 +40,10 @@ export function useAuth() {
   };
 
   const register = async ({ name, email, password }: RegisterCredentials) => {
+    if (!isValidEmail(email)) {
+      throw new Error("Veuillez saisir une adresse e-mail valide (ex: utilisateur@domaine.com).");
+    }
+
     const users: UsersMap = JSON.parse(
       localStorage.getItem("todo-app-users") || "{}"
     );
