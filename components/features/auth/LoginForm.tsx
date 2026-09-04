@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,12 +14,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 type LoginFormProps = {
   onSubmit: (email: string, password: string) => void;
 };
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -40,7 +44,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </CardDescription>
 
         <CardAction>
-          <Button variant="link">
+          <Button variant="link" asChild>
             <Link href="/auth/register">S&apos;inscrire</Link>
           </Button>
         </CardAction>
@@ -65,19 +69,29 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
             {/* Mot de passe */}
             <div className="grid gap-2">
-              <div className="flex items-center">
+              <div className="flex items-center justify-between">
                 <Label htmlFor="password">
                   Mot de passe
                 </Label>
-
               </div>
 
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
           </div>
@@ -87,8 +101,6 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           <Button type="submit" className="w-full">
             Se connecter
           </Button>
-
-          
         </CardFooter>
       </form>
     </Card>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 type RegisterFormProps = {
   onSubmit: (
@@ -23,16 +25,27 @@ type RegisterFormProps = {
 };
 
 export function RegisterForm({ onSubmit }: RegisterFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleSubmit = (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    setErrorMessage(null);
 
     const formData = new FormData(event.currentTarget);
 
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Les mots de passe ne correspondent pas.");
+      return;
+    }
 
     onSubmit(name, email, password);
   };
@@ -49,7 +62,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         <CardAction>
           <Link
             href="/auth/login"
-            className="text-primary underline-offset-4 hover:underline"
+            className="text-primary underline-offset-4 hover:underline text-sm font-medium"
           >
             Se connecter
           </Link>
@@ -59,6 +72,11 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       <form onSubmit={handleSubmit}>
         <CardContent>
           <div className="flex flex-col gap-6">
+            {errorMessage && (
+              <div className="rounded-md bg-destructive/15 p-3 text-xs text-destructive">
+                {errorMessage}
+              </div>
+            )}
 
             {/* Nom */}
             <div className="grid gap-2">
@@ -96,13 +114,24 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
                 Mot de passe
               </Label>
 
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Choisissez un mot de passe"
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
             {/* Confirmation */}
@@ -111,13 +140,24 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
                 Confirmer le mot de passe
               </Label>
 
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Répétez le mot de passe"
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                  aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
 
           </div>
