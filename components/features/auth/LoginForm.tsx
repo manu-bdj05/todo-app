@@ -22,6 +22,7 @@ type LoginFormProps = {
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +30,9 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     const formData = new FormData(event.currentTarget);
 
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const pwd = formData.get("password") as string;
 
-    onSubmit(email, password);
+    onSubmit(email, pwd);
   };
 
   return (
@@ -53,7 +54,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       <form onSubmit={handleSubmit}>
         <CardContent>
           <div className="flex flex-col gap-6">
-            
+
             {/* Email */}
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -62,7 +63,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="adresse@example.com"
                 pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                 title="Veuillez saisir une adresse e-mail valide (ex: utilisateur@domaine.com)"
                 required
@@ -81,18 +82,23 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
                 <Input
                   id="password"
                   name="password"
+                  placeholder="votre mot de passe"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="pr-10"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+                {password.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                )}
               </div>
             </div>
 

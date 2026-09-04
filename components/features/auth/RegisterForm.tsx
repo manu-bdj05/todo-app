@@ -27,6 +27,8 @@ type RegisterFormProps = {
 export function RegisterForm({ onSubmit }: RegisterFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = (
@@ -39,15 +41,15 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
 
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
+    const pwd = formData.get("password") as string;
+    const confirmPwd = formData.get("confirmPassword") as string;
 
-    if (password !== confirmPassword) {
+    if (pwd !== confirmPwd) {
       setErrorMessage("Les mots de passe ne correspondent pas.");
       return;
     }
 
-    onSubmit(name, email, password);
+    onSubmit(name, email, pwd);
   };
 
   return (
@@ -103,7 +105,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="adresse@example.com"
                 pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                 title="Veuillez saisir une adresse e-mail valide (ex: utilisateur@domaine.com)"
                 required
@@ -122,17 +124,21 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Choisissez un mot de passe"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="pr-10"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+                {password.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                )}
               </div>
             </div>
 
@@ -148,17 +154,21 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Répétez le mot de passe"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   className="pr-10"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-                  aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
+                {confirmPassword.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                    aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                )}
               </div>
             </div>
 
