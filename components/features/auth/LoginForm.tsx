@@ -44,7 +44,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </CardDescription>
 
         <CardAction>
-          <Button variant="link" asChild>
+          <Button variant="link">
             <Link href="/auth/register">S&apos;inscrire</Link>
           </Button>
         </CardAction>
